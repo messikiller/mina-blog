@@ -1,0 +1,30 @@
+@import "../../wxParse/wxParse.wxss";
+
+.cates {
+  width: 100%;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  position: fixed; 
+  z-index: 999;
+}
+
+.cate {
+  padding: 25rpx 5rpx;
+  text-align: center;
+}
+
+.tag {
+  display: inline-block;
+  margin: 5rpx;
+  color: #fff;
+  padding: 2rpx 15rpx;
+  border-radius: 6rpx;
+}
+
+.articles {
+  margin-top: 20rpx;
+}
+
+.box {
+  margin-bottom: 20rpx;
+}

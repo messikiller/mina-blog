@@ -54,5 +54,16 @@ App({
         }
       }
     });
+  },
+  requestArticleView: function (id, callback) {
+    wx.request({
+      url: this.data.apis.article_view + '?id=' + id,
+      data: {},
+      success: function (res) {
+        if (res.data.status == 200) {
+          callback(res.data);
+        }
+      }
+    });
   }
 })

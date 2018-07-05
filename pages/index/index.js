@@ -30,6 +30,10 @@ Page({
 
   handleArticleTap: function (event) {
     var article = event.currentTarget.dataset.article;
+    console.log('/pages/view/view?id=' + article.id);
+    wx.navigateTo({
+      url: '/pages/view/view?id=' + article.id
+    })
   },
 
   formatTime: getApp().utils.formatTime,

@@ -28,7 +28,7 @@
     data-article='{{ article }}'
     bindtap='handleArticleTap'
   >
-    <i-card title="{{ article.title }}" extra="{{ article.published_at }}">
+    <i-card title="{{ article.title }}">
       <view slot="content">
           <template is="wxParse" data="{{wxParseData: summaryArray[index]}}"/>
       </view>
@@ -39,6 +39,11 @@
           wx:for-item="tag"
           style="background-color: {{ tag.color }}"
         >{{ tag.tag_title }}</view>
+        <view class='article-time'>
+          {{ article.cate_title }}
+          /  
+          {{ article.published_at }}
+        </view>
       </view>
     </i-card>
   </view>

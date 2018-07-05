@@ -61,8 +61,8 @@ Page({
 
   onReachBottom: function() {
     var that = this;
-    var pageno = this.data.pageno + 1;
     this.setData({
+      pageno: that.data.pageno + 1,
       showBottomLoading: true
     });
     setTimeout(function() {

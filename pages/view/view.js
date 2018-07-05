@@ -16,15 +16,24 @@ Page({
     var WxParse = require('../../wxParse/wxParse.js');
     var id = options.id;
     var that = this;
-    getApp().requestArticleView(id, function(result) {
-      var article = result.data;
-console.log(article);
-      WxParse.wxParse('parseContent', 'html', article.content, that, 5);
+    var app = getApp();
 
-      that.setData({
-        id: article.id,
-        title: article.title
-      });
+    wx.request({
+      url: app.data.apis.article_view,
+      data: {
+        id: id
+      },
+      success: function(res) {
+        if (res.data.status == app.data.status.ok) {
+          var article = res.data.data;
+          console.log(article);
+          WxParse.wxParse('parseContent', 'html', article.content, that, 5);
+          that.setData({
+            id: article.id,
+            title: article.title
+          });
+        }
+      }
     });
   },
 

@@ -1,22 +1,25 @@
 <import src="../../wxParse/wxParse.wxml"/>
+<view hidden="{{!showTopLoading}}" class='common-loading'>
+  <i-spin custom>
+      <i-icon type="refresh" size="20" i-class="icon-load"></i-icon>
+  </i-spin>
+</view>
 <i-tabs current="{{ current_cate }}">
   <i-tab
-    wx:for="{{ cates }}"
+    wx:for="{{ pcates }}"
     wx:for-item="cate"
     wx:key=""
-    key="{{ cate.key }}"
+    key="{{ cate.id }}"
     title="{{ cate.title }}"
     data-cate="{{ cate }}"
     bindtap="handleTapCateBar"
   ></i-tab>
 </i-tabs>
 
-<view hidden='{{!showCates}}' class='cates common'>
-  <i-row>
-    <i-col span="8" i-class="col-class"><view class='cate'>PHP</view></i-col>
-    <i-col span="8" i-class="col-class"><view class='cate'>PHP</view></i-col>
-    <i-col span="8" i-class="col-class"><view class='cate'>PHP</view></i-col>
-  </i-row>
+<view hidden="{{!showTabLoading}}" class='common-loading'>
+  <i-spin custom>
+      <i-icon type="refresh" size="20" i-class="icon-load"></i-icon>
+  </i-spin>
 </view>
 
 <view class='articles'>
@@ -48,5 +51,11 @@
     </i-card>
   </view>
 </view>
+<view hidden="{{!showBottomLoading}}" class='common-loading'>
+  <i-spin custom>
+      <i-icon type="refresh" size="20" i-class="icon-load"></i-icon>
+  </i-spin>
+</view>
+
 
 

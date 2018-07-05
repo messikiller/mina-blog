@@ -5,6 +5,7 @@
     "pages/logs/logs"
   ],
   "window":{
+    "enablePullDownRefresh": true,
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#2d8cf0",
     "navigationBarTitleText": "Messikiller's Blog",

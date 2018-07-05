@@ -1,61 +1,151 @@
 Page({
   data: {
     showCates: false,
-    current_cate: 1,
-    cates: [
-      { key: 1, title: 'Home' },
-      { key: 2, title: '生活随笔' },
-      { key: 3, title: '数据库' },
-      { key: 4, title: '后端开发' },
-      { key: 5, title: '前端开发' },
-      { key: 6, title: '运维笔记' }
-    ],
-    articles: []
+    current_cate: 0,
+    pcates: [],
+    showTabLoading: false,
+    showTopLoading: false,
+    showBottomLoading: false,
+    loadingTime: 500,
+    articles: [],
+    pageno: 1,
+    pagesize: 6,
+    cate_pid: 0
   },
+
+  formatTime: getApp().utils.formatTime,
 
   handleTapCateBar: function(event) {
     var cate = event.currentTarget.dataset.cate;
-    if (cate.key == this.data.current_cate) {
-      this.setData({
-        current_cate: cate.key,
-        showCates: false
+    this.setData({
+      current_cate: cate.id,
+      articles: [],
+      pageno: 1,
+      pagesize: 6,
+      cate_pid: cate.id,
+      showTabLoading: true
+    });
+    var that = this;
+    setTimeout(function () {
+      that.requestAppendArticles(function() {
+        that.setData({
+          showTabLoading: false
+        });
       });
-    } else {
-      this.setData({
-        current_cate: cate.key,
-        showCates: true
-      });
-    }
+    }, this.data.loadingTime);
   },
 
   handleArticleTap: function (event) {
     var article = event.currentTarget.dataset.article;
-    console.log('/pages/view/view?id=' + article.id);
     wx.navigateTo({
       url: '/pages/view/view?id=' + article.id
     })
   },
 
-  formatTime: getApp().utils.formatTime,
+  onPullDownRefresh: function() {
+    wx.showNavigationBarLoading();
+    var that = this;
+    this.setData({
+      showTopLoading: true
+    });
+    setTimeout(function () {
+      that.setData({
+        articles: [],
+        pageno: 1,
+        pagesize: 6
+      });
+      that.requestAppendArticles(function () {
+        that.setData({
+          showTopLoading: false
+        });
+        wx.stopPullDownRefresh()
+        wx.hideNavigationBarLoading();
+      });
+    }, that.data.loadingTime);
+  },
+
+  onReachBottom: function() {
+    var that = this;
+    this.setData({
+      pageno: that.data.pageno + 1,
+      showBottomLoading: true
+    });
+    setTimeout(function() {
+      that.requestAppendArticles(function () {
+        that.setData({
+          showBottomLoading: false
+        });
+      });
+    }, this.data.loadingTime);
+  },
+
+  requestFreshPcates: function (param = {}, callback = function() {}) {
+    var that = this;
+    var app = getApp();
+    wx.request({
+      url: app.data.apis.category_list,
+      data: {},
+      success: function(res) {
+        var pcates = [{
+          id: 0,
+          title: 'Home'
+        }];
+        if (res.data.status == app.data.status.ok) {
+          var data = pcates.concat(res.data.data);
+          that.setData({
+            pcates: data
+          });
+        }
+      }
+    });
+  },
+
+  requestAppendArticles: function (callback=function(){}) {
+    var WxParse = require('../../wxParse/wxParse.js');
+    var that = this;
+    var app = getApp();
+
+    var param = {
+      pageno: that.data.pageno,
+      pagesize: that.data.pagesize
+    };
+
+    if (that.data.cate_pid > 0) {
+      param.cate_pid = that.data.cate_pid;
+    }
+
+    wx.request({
+      url: app.data.apis.article_list,
+      data: param,
+      success: function (res) {
+        if (res.data.status == app.data.status.ok) {
+          var data = res.data.data;
+          var len = data.length;
+          var start = that.data.articles.length;
+          data.map(function (item, index) {
+            item.published_at = that.formatTime(item.published_at);
+            var idx = start + index;
+            WxParse.wxParse('parseSummary' + idx, 'html', item.summary, that, 5);
+            if (index === len - 1) {
+              WxParse.wxParseTemArray('summaryArray', 'parseSummary', len+start, that)
+            }
+          });
+
+          var _new = that.data.articles.concat(data);
+
+          that.setData({
+            articles: _new
+          });
+        }
+      },
+      complete: function() {
+        callback();
+      }
+    });
+  },
 
   onLoad: function() {
-    var WxParse = require('../../wxParse/wxParse.js');
-
-    var that = this;
-    getApp().requestArticleList(function(result) {
-      var data = result.data;
-      var len = data.length;
-      data.map(function(item, index) {
-        item.published_at = that.formatTime(item.published_at);
-        WxParse.wxParse('parseSummary' + index, 'html', item.summary, that, 5);
-        if (index === len - 1) {
-          WxParse.wxParseTemArray('summaryArray', 'parseSummary', len, that)
-        }
-      });
-
-      that.setData({
-        articles: data
-      });
-    });
+    this.requestAppendArticles();
+    this.requestFreshPcates();
   }
 });

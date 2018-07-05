@@ -1,5 +1,5 @@
 //app.js
-var utils = require('./utils/util.js'); 
+var utils = require('./utils/util.js');
 App({
   onLaunch: function () {
     // 展示本地存储能力
@@ -39,31 +39,13 @@ App({
   },
   data: {
     apis: {
-      article_list: 'https://blog.messikiller.net/api/article/list',
-      article_view: 'https://blog.messikiller.net/api/article/view'
+      category_list: 'https://api.messikiller.net/category/list',
+      article_list: 'https://api.messikiller.net/article/list',
+      article_view: 'https://api.messikiller.net/article/view'
+    },
+    status: {
+      ok: 200
     }
   },
-  utils: utils,
-  requestArticleList: function(callback) {
-    wx.request({
-      url: this.data.apis.article_list,
-      data: {},
-      success: function(res) {
-        if (res.data.status == 200) {
-          callback(res.data);
-        }
-      }
-    });
-  },
-  requestArticleView: function (id, callback) {
-    wx.request({
-      url: this.data.apis.article_view + '?id=' + id,
-      data: {},
-      success: function (res) {
-        if (res.data.status == 200) {
-          callback(res.data);
-        }
-      }
-    });
-  }
+  utils: utils
 })

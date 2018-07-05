@@ -1,4 +1,6 @@
 <import src="../../wxParse/wxParse.wxml"/>
+
+
 <i-tabs current="{{ current_cate }}">
   <i-tab
     wx:for="{{ cates }}"
@@ -43,5 +45,8 @@
     </i-card>
   </view>
 </view>
+<i-spin custom wx:hide="{{!showBottonLoading}}">
+    <i-icon type="refresh" size="20" i-class="icon-load"></i-icon>
+</i-spin>
 
 

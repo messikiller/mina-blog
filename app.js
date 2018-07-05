@@ -43,16 +43,5 @@ App({
       article_view: 'https://blog.messikiller.net/api/article/view'
     }
   },
-  utils: utils,
-  requestArticleList: function(callback) {
-    wx.request({
-      url: this.data.apis.article_list,
-      data: {},
-      success: function(res) {
-        if (res.data.status == 200) {
-          callback(res.data);
-        }
-      }
-    });
-  }
+  utils: utils
 })

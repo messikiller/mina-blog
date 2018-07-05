@@ -10,7 +10,11 @@ Page({
       { key: 5, title: '前端开发' },
       { key: 6, title: '运维笔记' }
     ],
-    articles: []
+    showBottomLoading: false,
+    loadingTime: 500,
+    articles: [],
+    pageno: 1,
+    pagesize: 6
   },
 
   handleTapCateBar: function(event) {
@@ -32,26 +36,65 @@ Page({
     var article = event.currentTarget.dataset.article;
   },
 
+  onPullDownRefresh: function() {
+    wx.showNavigationBarLoading();
+    var that = this;
+    setTimeout(function () {
+      that.setData({
+        articles: [],
+        pageno: 1,
+        pagesize: 6
+      });
+      that.requestAppendArticles();
+      wx.stopPullDownRefresh()
+      wx.hideNavigationBarLoading();
+    }, that.data.loadingTime);
+  },
+
+  onReachBottom: function() {
+    var pageno = this.data.pageno + 1;
+    this.showBottomLoading = true;
+    setTimeout(this.requestAppendArticles, this.data.loadingTime);
+  },
+
   formatTime: getApp().utils.formatTime,
 
-  onLoad: function() {
+  requestAppendArticles: function () {
     var WxParse = require('../../wxParse/wxParse.js');
-
     var that = this;
-    getApp().requestArticleList(function(result) {
-      var data = result.data;
-      var len = data.length;
-      data.map(function(item, index) {
-        item.published_at = that.formatTime(item.published_at);
-        WxParse.wxParse('parseSummary' + index, 'html', item.summary, that, 5);
-        if (index === len - 1) {
-          WxParse.wxParseTemArray('summaryArray', 'parseSummary', len, that)
-        }
-      });
+    var app = getApp();
+    wx.request({
+      url: app.data.apis.article_list,
+      data: {
+        pageno: that.data.pageno,
+        pagesize: that.data.pagesize
+      },
+      success: function (res) {
+        if (res.data.status == 200) {
+          var data = res.data.data;
+          var len = data.length;
+          data.map(function (item, index) {
+            item.published_at = that.formatTime(item.published_at);
+            WxParse.wxParse('parseSummary' + index, 'html', item.summary, that, 5);
+            if (index === len - 1) {
+              WxParse.wxParseTemArray('summaryArray', 'parseSummary', len, that)
+            }
+          });
 
-      that.setData({
-        articles: data
-      });
+          var _new = that.data.articles.concat(data);
+
+          that.setData({
+            articles: _new
+          });
+        }
+      },
+      complete: function() {
+        that.showBottomLoading = false;
+      }
     });
+  },
+
+  onLoad: function() {
+    this.requestAppendArticles();
   }
 });

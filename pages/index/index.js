@@ -1,5 +1,8 @@
 Page({
   data: {
+    touchLastX: 0,
+    touchLastY: 0,
+    touchCuttentGesture: 0,
     showCates: false,
     current_cate: 0,
     pcates: [],
@@ -17,17 +20,21 @@ Page({
 
   handleTapCateBar: function(event) {
     var cate = event.currentTarget.dataset.cate;
+    this.changeCurrentCate(cate.id);
+  },
+
+  changeCurrentCate: function(cate_id) {
     this.setData({
-      current_cate: cate.id,
+      current_cate: cate_id,
       articles: [],
       pageno: 1,
       pagesize: 6,
-      cate_pid: cate.id,
+      cate_pid: cate_id,
       showTabLoading: true
     });
     var that = this;
     setTimeout(function () {
-      that.requestAppendArticles(function() {
+      that.requestAppendArticles(function () {
         that.setData({
           showTabLoading: false
         });
@@ -40,6 +47,71 @@ Page({
     wx.navigateTo({
       url: '/pages/view/view?id=' + article.id
     })
+  },
+
+  handleArticlesTouchMove: function(event) {
+    var currentX = event.touches[0].pageX
+    var currentY = event.touches[0].pageY
+    var tx = currentX - this.data.touchLastX
+    var ty = currentY - this.data.touchLastY
+
+    var size = 10;
+    var currentGesture = this.data.touchCuttentGesture;
+    
+    if (Math.abs(tx) > Math.abs(ty) && Math.abs(tx) >= size) {
+      if (tx < 0) {
+        //left touch
+        currentGesture = 1;
+      } else if (tx > 0) {
+        //right touch
+        currentGesture = 2;
+      }
+    }
+
+    this.setData({
+      touchCuttentGesture: currentGesture,
+      touchLastX: currentX,
+      touchLastY: currentY
+    });
+  },
+
+  handleArticlesTouchStart: function (event) {
+    this.setData({
+      touchLastX: event.touches[0].pageX,
+      touchLastY: event.touches[0].pageY
+    });
+  },
+
+  handleArticlesTouchEnd: function (event) {
+    var currentGesture = this.data.touchCuttentGesture;
+    var current_cate = this.data.current_cate;
+    var cates = this.data.pcates;
+
+    var previous = 0;
+    var next = 0;
+    var len = cates.length;
+    cates.forEach(function(cate, index) {
+      if (cate.id == current_cate) {
+        next = index == (len - 1) ? 0 : (index + 1);
+        previous = index == 0 ? (len - 1) : (index - 1);
+      }
+    });
+
+    var next_cate = cates[next].id;
+    var previous_cate = cates[previous].id;
+    console.log(currentGesture);
+    if (currentGesture == 1) {
+      // touch move left
+      this.changeCurrentCate(next_cate);
+
+    } else if (currentGesture == 2) {
+      // touch move right
+      this.changeCurrentCate(previous_cate);
+    }
+
+    this.setData({
+      currentGesture: 0
+    });
   },
 
   onPullDownRefresh: function() {
@@ -147,5 +219,9 @@ Page({
   onLoad: function() {
     this.requestAppendArticles();
     this.requestFreshPcates();
+  },
+
+  onShareAppMessage: function (res) {
+    return getApp().handleShareApp();
   }
 });

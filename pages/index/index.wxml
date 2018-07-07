@@ -4,7 +4,7 @@
       <i-icon type="refresh" size="20" i-class="icon-load"></i-icon>
   </i-spin>
 </view>
-<i-tabs current="{{ current_cate }}">
+<i-tabs current="{{ current_cate }}" i-class="fixed-tabs">
   <i-tab
     wx:for="{{ pcates }}"
     wx:for-item="cate"
@@ -16,13 +16,17 @@
   ></i-tab>
 </i-tabs>
 
-<view hidden="{{!showTabLoading}}" class='common-loading'>
-  <i-spin custom>
-      <i-icon type="refresh" size="20" i-class="icon-load"></i-icon>
-  </i-spin>
-</view>
-
-<view class='articles'>
+<view
+  class='articles'
+  bindtouchmove="handleArticlesTouchMove"
+  bindtouchstart="handleArticlesTouchStart"
+  bindtouchend="handleArticlesTouchEnd"
+>
+  <view hidden="{{!showTabLoading}}" class='common-loading'>
+    <i-spin custom>
+        <i-icon type="refresh" size="20" i-class="icon-load"></i-icon>
+    </i-spin>
+  </view>
   <view
     wx:for="{{ articles }}"
     wx:key=""
@@ -51,6 +55,7 @@
     </i-card>
   </view>
 </view>
+  
 <view hidden="{{!showBottomLoading}}" class='common-loading'>
   <i-spin custom>
       <i-icon type="refresh" size="20" i-class="icon-load"></i-icon>

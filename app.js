@@ -47,5 +47,12 @@ App({
       ok: 200
     }
   },
-  utils: utils
+  utils: utils,
+
+  handleShareApp: function() {
+    return {
+      title: 'Messikiller\'s Blog',
+      path: '/pages/index/inde'
+    };
+  }
 })

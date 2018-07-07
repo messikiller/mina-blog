@@ -37,6 +37,7 @@
 
 .articles {
   margin-top: 20rpx;
+  padding-top: 80rpx;
 }
 
 .box {
@@ -45,4 +46,10 @@
 
 .article-time {
   float: right;
+}
+
+.fixed-tabs {
+  position: fixed !important;
+  top: 0;
+  z-index: 999; 
 }

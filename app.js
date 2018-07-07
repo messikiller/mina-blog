@@ -50,9 +50,13 @@ App({
   utils: utils,
 
   handleShareApp: function() {
+    var pages = getCurrentPages();
+    var currentPage = pages[pages.length - 1];
+    var url = currentPage.route;
+
     return {
       title: 'Messikiller\'s Blog',
-      path: '/pages/index/inde'
+      path: url
     };
   }
 })

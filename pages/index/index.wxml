@@ -16,12 +16,7 @@
   ></i-tab>
 </i-tabs>
 
-<view
-  class='articles'
-  bindtouchmove="handleArticlesTouchMove"
-  bindtouchstart="handleArticlesTouchStart"
-  bindtouchend="handleArticlesTouchEnd"
->
+<view class='articles'>
   <view hidden="{{!showTabLoading}}" class='common-loading'>
     <i-spin custom>
         <i-icon type="refresh" size="20" i-class="icon-load"></i-icon>

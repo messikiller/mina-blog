@@ -1,8 +1,7 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/view/view",
-    "pages/logs/logs"
+    "pages/view/view"
   ],
   "window":{
     "enablePullDownRefresh": true,

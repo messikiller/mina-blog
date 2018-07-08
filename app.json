@@ -1,11 +1,31 @@
 {
   "pages":[
+    "pages/home/home",
     "pages/index/index",
     "pages/view/view"
   ],
+  "tabBar": {
+    "color": "#8a8a8a",
+    "selectedColor": "#2d8cf0",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "iconPath": "/images/home.png",
+        "selectedIconPath": "/images/home_selected.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "/images/list.png",
+        "selectedIconPath": "/images/list_selected.png",
+        "text": "文章"
+      }
+    ]
+  },
   "window":{
     "enablePullDownRefresh": true,
     "backgroundTextStyle":"light",
+    "backgroundColor": "#f8f8f9",
     "navigationBarBackgroundColor": "#2d8cf0",
     "navigationBarTitleText": "Messikiller's Blog",
     "navigationBarTextStyle":"white"

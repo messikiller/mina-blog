@@ -1,0 +1,8 @@
+<view class='app'>
+  <view class='center'>
+    <image src='https://blog.messikiller.net/images/header-logo.jpg' class="avatar"></image>
+    <view class='moto'>折而不挠，终不为下</view>
+    <view class='hr'></view>
+    <view class='moto'>Messikiller's MINA Blog</view>
+  </view>
+</view>

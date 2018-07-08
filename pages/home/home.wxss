@@ -1,0 +1,40 @@
+/* pages/home/home.wxss */
+page {
+  height: 100%;
+  background-color: #2d8cf0;  
+}
+.app {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+}
+
+.center {
+   width: 400rpx; 
+   padding: 20rpx 40rpx; 
+}
+
+.avatar {
+  display: block;
+  margin: 0rpx auto;
+  height: 160rpx;
+  width: 160rpx;
+  border:5rpx solid #fff;
+  margin-bottom: 35rpx;
+}
+
+.moto {
+  font-size: 28rpx;
+  text-align: center;
+  margin: 15rpx auto;
+  color: #fff; 
+}
+
+.hr {
+  display: block;
+  height: 1rpx;
+  width: 100%;
+  border-bottom: 1px solid #fff;
+}

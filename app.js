@@ -2,6 +2,9 @@
 var utils = require('./utils/util.js');
 App({
   onLaunch: function () {
+    wx.showLoading({
+      title: 'Loading...'
+    });
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
@@ -34,6 +37,10 @@ App({
       }
     })
   },
+
+  onShow: function() {
+    wx.hideLoading();
+  },
   globalData: {
     userInfo: null
   },
@@ -48,7 +55,6 @@ App({
     }
   },
   utils: utils,
-
   handleShareApp: function() {
     var pages = getCurrentPages();
     var currentPage = pages[pages.length - 1];
@@ -58,5 +64,13 @@ App({
       title: 'Messikiller\'s Blog',
       path: url
     };
+  },
+  showLoading: function() {
+    wx.showLoading({
+      title: 'Loading...'
+    });
+  },
+  hideLoading: function() {
+    wx.hideLoading();
   }
 })

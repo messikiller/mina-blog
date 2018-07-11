@@ -6,13 +6,16 @@ Page({
    */
   data: {
     id: '',
-    title: ''
+    title: '',
+    showLoading: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    getApp().showLoading();
+
     var WxParse = require('../../wxParse/wxParse.js');
     var id = options.id;
     var that = this;
@@ -26,12 +29,12 @@ Page({
       success: function(res) {
         if (res.data.status == app.data.status.ok) {
           var article = res.data.data;
-          console.log(article);
           WxParse.wxParse('parseContent', 'html', article.content, that, 5);
           that.setData({
             id: article.id,
             title: article.title
           });
+          getApp().hideLoading()
         }
       }
     });
@@ -41,7 +44,9 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () {
-  
+    this.setData({
+      showLoading: false
+    });
   },
 
   /**

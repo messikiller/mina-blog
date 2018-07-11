@@ -149,8 +149,13 @@ Page({
   },
 
   onLoad: function() {
+    getApp().showLoading();
     this.requestAppendArticles();
     this.requestFreshPcates();
+  },
+
+  onShow: function() {
+    getApp().hideLoading();
   },
 
   onShareAppMessage: function (res) {

@@ -1,5 +1,6 @@
 //app.js
 var utils = require('./utils/util.js');
+const Towxml = require('/towxml/main');
 App({
   onLaunch: function () {
     wx.showLoading({
@@ -38,6 +39,9 @@ App({
     })
   },
 
+
+  towxml: new Towxml(),
+
   onShow: function() {
     wx.hideLoading();
   },
@@ -55,14 +59,19 @@ App({
     }
   },
   utils: utils,
-  handleShareApp: function() {
+  handleShareApp: function(param={}) {
     var pages = getCurrentPages();
     var currentPage = pages[pages.length - 1];
     var url = currentPage.route;
 
-    return {
+    var obj = Object.assign({
       title: 'Messikiller\'s Blog',
       path: url
+    }, param);
+
+    return {
+      title: obj.title,
+      path: obj.url
     };
   },
   showLoading: function() {

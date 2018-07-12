@@ -1,15 +1,12 @@
 <!--pages/view/view.wxml-->
-<import src="../../wxParse/wxParse.wxml"/>
+<import src="/towxml/entry.wxml"/>
 <view class="page">
     <view class="page__bd">
         <view class="weui-article">
             <view class="weui-article__h1">{{title}}</view>
-            <view class="weui-article__section">
-                <view class="weui-article__section">
-                    <view class="weui-article__p">
-                        <template is="wxParse" data="{{wxParseData:parseContent.nodes}}"/>
-                    </view>
-                </view>
+            
+            <view class="weui-article__section">  
+                <template is="entry" data="{{...article}}"/>
             </view>
         </view>
     </view>

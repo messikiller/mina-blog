@@ -7,16 +7,15 @@ Page({
   data: {
     id: '',
     title: '',
+    article: {},
     showLoading: false
   },
-
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
     getApp().showLoading();
-
-    var WxParse = require('../../wxParse/wxParse.js');
+    
     var id = options.id;
     var that = this;
     var app = getApp();
@@ -29,12 +28,13 @@ Page({
       success: function(res) {
         if (res.data.status == app.data.status.ok) {
           var article = res.data.data;
-          WxParse.wxParse('parseContent', 'html', article.content, that, 5);
+          let content_parse = app.towxml.toJson(article.content_original, 'markdown');
           that.setData({
             id: article.id,
-            title: article.title
+            title: article.title,
+            article: content_parse
           });
-          getApp().hideLoading()
+          app.hideLoading()
         }
       }
     });
@@ -88,6 +88,15 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function (res) {
-    return getApp().handleShareApp();
+    var pages = getCurrentPages();
+    var currentPage = pages[pages.length - 1];
+    var url = currentPage.route;
+
+    var param = {
+      title: this.data.title,
+      url: url + '?id=' + this.data.id
+    };
+
+    return getApp().handleShareApp(param);
   }
 })
